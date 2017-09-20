@@ -8,7 +8,7 @@ void setup() {
 
 
 
-  setText("12394567", 8);
+  setText("1239456780", 10);
 }
 
 

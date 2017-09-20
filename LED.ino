@@ -95,6 +95,24 @@ void initLED() {
   digits[7][2] = B0100;
   digits[7][1] = B1000;
   digits[7][0] = B0000;
+
+  digits[8][7] = B0000;
+  digits[8][6] = B0110;
+  digits[8][5] = B1001;
+  digits[8][4] = B0110;
+  digits[8][3] = B1001;
+  digits[8][2] = B1001;
+  digits[8][1] = B0110;
+  digits[8][0] = B0000;
+
+  digits[0][7] = B0000;
+  digits[0][6] = B0110;
+  digits[0][5] = B1001;
+  digits[0][4] = B1001;
+  digits[0][3] = B1001;
+  digits[0][2] = B1001;
+  digits[0][1] = B0110;
+  digits[0][0] = B0000;
 }
 
 void clearScreen() {
@@ -111,13 +129,15 @@ void setText(char* text, byte len) {
   }
   for (int i = 0; i < len; i++) {
     byte *digit = digits[text[i] - 0x30];
-    byte firstSegment = (i * 5) / 8;
-    byte secondSegment = (i * 5 + 5) / 8;
+    byte firstSegment = (i * 5 - 1) / 8;
+    byte secondSegment = (i * 5 + 4) / 8;
     byte shiftLeft = 8 - ((i * 5 + 4) % 8);
     byte shiftRight = 8 - shiftLeft;
     
     for (int y = 0; y < 8; y++) {
-      displayContent[y][firstSegment] = displayContent[y][firstSegment] | (digit[y] >> shiftRight);
+      if (i != 0) {
+        displayContent[y][firstSegment] = displayContent[y][firstSegment] | (digit[y] >> shiftRight);
+      }
       displayContent[y][secondSegment] = displayContent[y][secondSegment] | (digit[y] << shiftLeft);
     }
   }

@@ -1,25 +1,20 @@
 
-byte content[8][32];
+byte displayContent[8][32];
+const byte displayLength = 40;
 
 void setup() {
   initLED();
-  
+  displayContent[6][0] = B00000000;
+  displayContent[5][0] = B00100100;
+  displayContent[4][0] = B01011010;
+  displayContent[3][0] = B01000010;
+  displayContent[2][0] = B00100100;
+  displayContent[1][0] = B00011000;
 }
 
 
 void loop() {
-  sendToAll(1, B10101010);
-  sendToAll(2, 0);
-  delay(1000);
-  sendToAll(1, 0);
-  sendToAll(2, B01010101);
-  delay(1000);
+  updateLED();
+  delay(100);
 }
 
-void clearContent() {
-  for(int i = 0; i < 8; i++) {
-    for (int j = 0; j < 32; j++) {
-      content[i][j] = 0;
-    }
-  }
-}

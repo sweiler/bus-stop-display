@@ -7,6 +7,16 @@ unsigned long lastUpdate;
 
 byte digits[10][8];
 
+const byte space[8] = {
+  B0000,
+  B0000,
+  B0000,
+  B0000,
+  B0000,
+  B0000,
+  B0000,
+  B0000
+};
 
 
 void initLED() {
@@ -128,7 +138,13 @@ void setText(char* text, byte len) {
     }
   }
   for (int i = 0; i < len; i++) {
-    byte *digit = digits[text[i] - 0x30];
+    byte *digit;
+    
+    if (text[i] < 0x30 || text[i] > 0x39) {
+      digit = space;
+    } else {
+      digit = digits[text[i] - 0x30];
+    }
     byte firstSegment = (i * 5 - 1) / 8;
     byte secondSegment = (i * 5 + 4) / 8;
     byte shiftLeft = 8 - ((i * 5 + 4) % 8);

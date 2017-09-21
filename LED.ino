@@ -5,7 +5,108 @@ const int slaveSelectPin = 5;
 byte currentOffset;
 unsigned long lastUpdate;
 
-byte digits[10][8];
+const byte digits[10][8] = {
+  {
+    B0000,
+    B0110,
+    B1001,
+    B1001,
+    B1001,
+    B1001,
+    B0110,
+    B0000
+  },
+  {
+    B0000,
+    B0001,
+    B0011,
+    B0101,
+    B1001,
+    B0001,
+    B0001,
+    B0000
+  },
+  {
+    B0000,
+    B0110,
+    B1001,
+    B0001,
+    B0010,
+    B0100,
+    B1111,
+    B0000
+  },
+  {
+    B0000,
+    B1110,
+    B0001,
+    B0110,
+    B0001,
+    B0001,
+    B1110,
+    B0000
+  },
+  {
+    B0000,
+    B0010,
+    B0110,
+    B1010,
+    B1111,
+    B0010,
+    B0010,
+    B0000
+  },
+  {
+    B0000,
+    B1111,
+    B1000,
+    B1110,
+    B0001,
+    B0001,
+    B1110,
+    B0000
+  },
+  {
+    B0000,
+    B0110,
+    B1000,
+    B1110,
+    B1001,
+    B1001,
+    B0110,
+    B0000
+  },
+  {
+    B0000,
+    B1111,
+    B0001,
+    B0001,
+    B0010,
+    B0100,
+    B1000,
+    B0000
+  },
+  {
+    B0000,
+    B0110,
+    B1001,
+    B0110,
+    B1001,
+    B1001,
+    B0110,
+    B0000
+  },
+  {
+    B0000,
+    B0110,
+    B1001,
+    B1001,
+    B0111,
+    B0001,
+    B1110,
+    B0000
+  }
+};
 
 const byte space[8] = {
   B0000,
@@ -33,96 +134,6 @@ void initLED() {
 
   currentOffset = 0;
   lastUpdate = 0;
-
-  digits[1][7] = B0000;
-  digits[1][6] = B0001;
-  digits[1][5] = B0011;
-  digits[1][4] = B0101;
-  digits[1][3] = B1001;
-  digits[1][2] = B0001;
-  digits[1][1] = B0001;
-  digits[1][0] = B0000;
-
-  digits[2][7] = B0000;
-  digits[2][6] = B0110;
-  digits[2][5] = B1001;
-  digits[2][4] = B0001;
-  digits[2][3] = B0010;
-  digits[2][2] = B0100;
-  digits[2][1] = B1111;
-  digits[2][0] = B0000;
-
-  digits[3][7] = B0000;
-  digits[3][6] = B1110;
-  digits[3][5] = B0001;
-  digits[3][4] = B0110;
-  digits[3][3] = B0001;
-  digits[3][2] = B0001;
-  digits[3][1] = B1110;
-  digits[3][0] = B0000;
-
-  digits[9][7] = B0000;
-  digits[9][6] = B0110;
-  digits[9][5] = B1001;
-  digits[9][4] = B1001;
-  digits[9][3] = B0111;
-  digits[9][2] = B0001;
-  digits[9][1] = B1110;
-  digits[9][0] = B0000;
-
-  digits[4][7] = B0000;
-  digits[4][6] = B0010;
-  digits[4][5] = B0110;
-  digits[4][4] = B1010;
-  digits[4][3] = B1111;
-  digits[4][2] = B0010;
-  digits[4][1] = B0010;
-  digits[4][0] = B0000;
-
-  digits[5][7] = B0000;
-  digits[5][6] = B1111;
-  digits[5][5] = B1000;
-  digits[5][4] = B1110;
-  digits[5][3] = B0001;
-  digits[5][2] = B0001;
-  digits[5][1] = B1110;
-  digits[5][0] = B0000;
-
-  digits[6][7] = B0000;
-  digits[6][6] = B0110;
-  digits[6][5] = B1000;
-  digits[6][4] = B1110;
-  digits[6][3] = B1001;
-  digits[6][2] = B1001;
-  digits[6][1] = B0110;
-  digits[6][0] = B0000;
-
-  digits[7][7] = B0000;
-  digits[7][6] = B1111;
-  digits[7][5] = B0001;
-  digits[7][4] = B0001;
-  digits[7][3] = B0010;
-  digits[7][2] = B0100;
-  digits[7][1] = B1000;
-  digits[7][0] = B0000;
-
-  digits[8][7] = B0000;
-  digits[8][6] = B0110;
-  digits[8][5] = B1001;
-  digits[8][4] = B0110;
-  digits[8][3] = B1001;
-  digits[8][2] = B1001;
-  digits[8][1] = B0110;
-  digits[8][0] = B0000;
-
-  digits[0][7] = B0000;
-  digits[0][6] = B0110;
-  digits[0][5] = B1001;
-  digits[0][4] = B1001;
-  digits[0][3] = B1001;
-  digits[0][2] = B1001;
-  digits[0][1] = B0110;
-  digits[0][0] = B0000;
 }
 
 void clearScreen() {
@@ -152,9 +163,9 @@ void setText(char* text, byte len) {
     
     for (int y = 0; y < 8; y++) {
       if (i != 0) {
-        displayContent[y][firstSegment] = displayContent[y][firstSegment] | (digit[y] >> shiftRight);
+        displayContent[7 - y][firstSegment] = displayContent[7 - y][firstSegment] | (digit[y] >> shiftRight);
       }
-      displayContent[y][secondSegment] = displayContent[y][secondSegment] | (digit[y] << shiftLeft);
+      displayContent[7 - y][secondSegment] = displayContent[7 - y][secondSegment] | (digit[y] << shiftLeft);
     }
   }
 }
@@ -189,7 +200,7 @@ void sendToAll(byte address, byte value) {
 }
 
 void sendData(byte addresses[], byte values[]) {
-  SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
   digitalWrite(slaveSelectPin, LOW);
   for (int i = 0; i < 4; i++) {
     SPI.transfer(addresses[i]);

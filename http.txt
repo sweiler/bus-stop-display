@@ -1,0 +1,6 @@
+GET /api/monitors/b2d2d31c-36b2-4a86-b014-be7caad2608f HTTP/1.1
+Host: abfahrten.hvv.de
+User-Agent: arduino-ethernet
+Accept: */*
+Content-Type: application/vnd.api+json
+Connection: close

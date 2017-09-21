@@ -12,6 +12,7 @@ const int timeZone = 2;
 EthernetUDP Udp;
 const unsigned int localPort = 8888;
 
+
 void setup() {
   if (Ethernet.begin(mac) == 0) {
     // no point in carrying on, so do nothing forevermore:
@@ -33,10 +34,11 @@ void setup() {
 
 void loop() {
   updateLED();
+  updateHttp();
   if (millis() - lastTextUpdate > 1000) {
-    char text[10];
-    sprintf(text, "%d %d", hour(), minute());
-    setText(text, 8);
+    //char text[10];
+    //sprintf(text, "%d %d", hour(), minute());
+    //setText(text, 8);
     lastTextUpdate = millis();
   }
 }

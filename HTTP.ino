@@ -18,6 +18,7 @@ void updateHttp() {
   while (client.available()) {
     char c = client.read();
     trail[trailIndex] = c;
+    
     if (trail[idxNeg(3)] == 't' && trail[idxNeg(2)] == 'i' && trail[idxNeg(1)] == 'm' && trail[idxNeg(0)] == 'e') {
       client.read();
       client.read();
@@ -27,7 +28,32 @@ void updateHttp() {
         busTime[i] = client.read();
       }
       busTime[5] = '\0';
-      fetchedBusTime = 1;
+      fetchedBusTime += 1;
+    }
+
+    if (trail[idxNeg(4)] == 'd' && trail[idxNeg(3)] == 'e' && trail[idxNeg(2)] == 'l' && trail[idxNeg(1)] == 'a' && trail[idxNeg(0)] == 'y') {
+      client.read();
+      client.read();
+      client.read();
+      int i = 0;
+      bool doneDelay = 0;
+      while (i < 6) {
+        if (doneDelay) {
+          busDelay[i] = ' ';
+        } else {
+          busDelay[i] = client.read();
+          if (busDelay[i] == ')') {
+            doneDelay = 1;
+          }
+        }
+        
+        i++;
+      }
+      busDelay[6] = '\0';
+      fetchedBusTime += 1;
+    }
+    
+    if (fetchedBusTime == 2) {
       trailIndex = 0;
       client.stop();
       return;
@@ -37,6 +63,7 @@ void updateHttp() {
 
   if (millis() - lastRequest > 30000) {
     client.stop();
+    fetchedBusTime = 0;
     if (client.connect(server, 80)) {
       client.println("GET /api/monitors/b2d2d31c-36b2-4a86-b014-be7caad2608f HTTP/1.1");
       client.println("Host: abfahrten.hvv.de");

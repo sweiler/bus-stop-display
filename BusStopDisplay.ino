@@ -12,8 +12,9 @@ const int timeZone = 1;
 EthernetUDP Udp;
 const unsigned int localPort = 8888;
 
-bool fetchedBusTime = 0;
+int fetchedBusTime = 0;
 char busTime[6];
+char busDelay[7];
 
 void setup() {
   if (Ethernet.begin(mac) == 0) {
@@ -38,7 +39,7 @@ void loop() {
   updateLED();
   updateHttp();
   if (millis() - lastTextUpdate > 5000) {
-    if (fetchedBusTime) {
+    if (fetchedBusTime == 2) {
       char hourBuf[3];
       char minBuf[3];
       hourBuf[0] = busTime[0];
@@ -50,9 +51,9 @@ void loop() {
 
       int hdiff = atoi(hourBuf) - hour();
       int mdiff = hdiff * 60 + atoi(minBuf) - minute();
-      char text[3];
-      snprintf(text, 3, "%d", mdiff);
-      setText(text, 2);
+      char text[8];
+      snprintf(text, 8, "%d%s", mdiff, busDelay);
+      setText(text, 7);
     } else {
       setText("000",3);
     }

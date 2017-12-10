@@ -119,6 +119,38 @@ const byte space[8] = {
   B0000
 };
 
+const byte parOpen[8] = {
+  B0000,
+  B0010,
+  B0100,
+  B0100,
+  B0100,
+  B0100,
+  B0010,
+  B0000
+};
+
+const byte parClose[8] = {
+  B0000,
+  B0100,
+  B0010,
+  B0010,
+  B0010,
+  B0010,
+  B0100,
+  B0000
+};
+
+const byte plus[8] = {
+  B0000,
+  B0000,
+  B0000,
+  B0010,
+  B0111,
+  B0010,
+  B0000,
+  B0000
+};
 
 void initLED() {
   pinMode(slaveSelectPin, OUTPUT);
@@ -151,10 +183,16 @@ void setText(char* text, byte len) {
   for (int i = 0; i < len; i++) {
     byte *digit;
     
-    if (text[i] < 0x30 || text[i] > 0x39) {
-      digit = space;
-    } else {
+    if (text[i] >= 0x30 && text[i] <= 0x39) {
       digit = digits[text[i] - 0x30];
+    } else if (text[i] == 0x28) {
+      digit = parOpen;
+    } else if (text[i] == 0x29) {
+      digit = parClose;
+    } else if (text[i] == 0x2B) {
+      digit = plus;
+    } else {
+      digit = space;
     }
     byte firstSegment = (i * 5 - 1) / 8;
     byte secondSegment = (i * 5 + 4) / 8;

@@ -7,7 +7,7 @@ byte displayContent[8][8];
 const byte displayLength = 56;
 unsigned long lastTextUpdate;
 const byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; 
-IPAddress timeServer(128, 4, 40, 12);
+IPAddress timeServer(150, 101, 254, 110);
 const int timeZone = 1;
 EthernetUDP Udp;
 const unsigned int localPort = 8888;

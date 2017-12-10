@@ -3,15 +3,17 @@
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 
-byte displayContent[8][5];
-const byte displayLength = 40;
-long lastTextUpdate;
+byte displayContent[8][8];
+const byte displayLength = 56;
+unsigned long lastTextUpdate;
 const byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; 
 IPAddress timeServer(132, 163, 4, 101);
-const int timeZone = 2;
+const int timeZone = 1;
 EthernetUDP Udp;
 const unsigned int localPort = 8888;
 
+bool fetchedBusTime = 0;
+char busTime[6];
 
 void setup() {
   if (Ethernet.begin(mac) == 0) {
@@ -35,10 +37,26 @@ void setup() {
 void loop() {
   updateLED();
   updateHttp();
-  if (millis() - lastTextUpdate > 1000) {
-    //char text[10];
-    //sprintf(text, "%d %d", hour(), minute());
-    //setText(text, 8);
+  if (millis() - lastTextUpdate > 5000) {
+    if (fetchedBusTime) {
+      char hourBuf[3];
+      char minBuf[3];
+      hourBuf[0] = busTime[0];
+      hourBuf[1] = busTime[1];
+      hourBuf[2] = '\0';
+      minBuf[0] = busTime[3];
+      minBuf[1] = busTime[4];
+      minBuf[2] = '\0';
+
+      int hdiff = atoi(hourBuf) - hour();
+      int mdiff = hdiff * 60 + atoi(minBuf) - minute();
+      char text[3];
+      snprintf(text, 3, "%d", mdiff);
+      setText(text, 2);
+    } else {
+      setText("000",3);
+    }
+    
     lastTextUpdate = millis();
   }
 }

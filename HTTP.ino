@@ -22,18 +22,20 @@ void updateHttp() {
       client.read();
       client.read();
       client.read();
-      char number[5];
+      
       for (int i = 0; i < 5; i++) {
-        number[i] = client.read();
+        busTime[i] = client.read();
       }
-      setText(number, 5);
+      busTime[5] = '\0';
+      fetchedBusTime = 1;
+      trailIndex = 0;
       client.stop();
       return;
     }
     trailIndex = (trailIndex + 1) % 15;
   }
 
-  if (millis() - lastRequest > 10000) {
+  if (millis() - lastRequest > 30000) {
     client.stop();
     if (client.connect(server, 80)) {
       client.println("GET /api/monitors/b2d2d31c-36b2-4a86-b014-be7caad2608f HTTP/1.1");

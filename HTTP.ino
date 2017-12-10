@@ -61,7 +61,7 @@ void updateHttp() {
     trailIndex = (trailIndex + 1) % 15;
   }
 
-  if (millis() - lastRequest > 30000) {
+  if (millis() - lastRequest > 30000 && fetchNext) {
     client.stop();
     fetchedBusTime = 0;
     if (client.connect(server, 80)) {

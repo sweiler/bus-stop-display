@@ -15,6 +15,7 @@ const unsigned int localPort = 8888;
 int fetchedBusTime = 0;
 char busTime[6];
 char busDelay[7];
+bool fetchNext = 1;
 
 void setup() {
   if (Ethernet.begin(mac) == 0) {
@@ -51,11 +52,16 @@ void loop() {
 
       int hdiff = atoi(hourBuf) - hour();
       int mdiff = hdiff * 60 + atoi(minBuf) - minute();
+      if (mdiff <= 1) {
+        fetchNext = 1;
+      } else if (mdiff <= 6) {
+        fetchNext = 0;
+      }
       char text[8];
       snprintf(text, 8, "%d%s", mdiff, busDelay);
       setText(text, 7);
     } else {
-      setText("000",3);
+      setText("+++",3);
     }
     
     lastTextUpdate = millis();

@@ -28,7 +28,7 @@ void setup() {
   delay(400);
   Udp.begin(localPort);
   setSyncProvider(getNtpTime);
-  setSyncInterval(20);
+  setSyncInterval(60);
   delay(500);
   initLED();
   //setText("111", 10);

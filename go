@@ -6,4 +6,11 @@ function compile {
   $ARDUINO_EXEC --verify BusStopDisplay.ino
 }
 
-compile
+function compileTests {
+  mkdir -p build
+  cd build
+  cmake ..
+  make
+}
+
+compileTests

@@ -1,5 +1,5 @@
 EthernetClient client;
-const char server[] = "abfahrten.hvv.de";
+const char server[] = "abfahrten.die-weilers.de";
 
 unsigned long lastRequest = 0;
 char trail[15];
@@ -65,11 +65,10 @@ void updateHttp() {
     client.stop();
     fetchedBusTime = 0;
     if (client.connect(server, 80)) {
-      client.println("GET /api/monitors/b2d2d31c-36b2-4a86-b014-be7caad2608f HTTP/1.1");
-      client.println("Host: abfahrten.hvv.de");
+      client.println("GET / HTTP/1.1");
+      client.println("Host: abfahrten.die-weilers.de");
       client.println("User-Agent: arduino-ethernet");
       client.println("Accept: */*");
-      client.println("Content-Type: application/vnd.api+json");
       client.println("Connection: close");
       client.println();
     } else {
